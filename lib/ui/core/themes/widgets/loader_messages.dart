@@ -6,7 +6,7 @@ mixin LoaderAndMessages<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   bool isLoading = false;
   String? message;
 
-  void showLoading() {
+  void showLoader() {
     if (!isLoading) {
       isLoading = true;
       showDialog(
@@ -20,7 +20,7 @@ mixin LoaderAndMessages<T extends ConsumerStatefulWidget> on ConsumerState<T> {
     }
   }
 
-  void hideLoading() {
+  void hideLoader() {
     if (isLoading) {
       isLoading = false;
       Navigator.of(context).pop();

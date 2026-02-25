@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitetura CineBox - Explicação Completa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .diagram {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+
+        .folder-structure {
+            background: #f0f4ff;
+            border-left: 4px solid #764ba2;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+
+        code {
+            background: #f0f4ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #d63384;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block code {
+            background: none;
+            color: #d4d4d4;
+            padding: 0;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .class {
+            color: #4ec9b0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+
+        .checkmark {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 40px;
+            }
+
+            h1,
+            h2 {
+                page-break-after: avoid;
+            }
+
+            p {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎬 CineBox - Arquitetura Explicada</h1>
+        <p class="subtitle">Uma explicação simples e visual sobre como o projeto está estruturado</p>
+
+        <!-- SEÇÃO 1: As Camadas -->
+        <h2>🏗️ As Camadas (The Big Picture)</h2>
+
+        <p>Seu projeto está organizado em 3 camadas principais:</p>
+
+        <div class="diagram">
+            ┌─────────────────────────────────────────┐
+            │ UI LAYER (Camada de Apresentação) │ ← O que o usuário vê
+            │ - Telas (Screens) │
+            │ - ViewModel (Lógica da tela) │
+            │ - Commands (Ações/Botões) │
+            └─────────────────────────────────────────┘
+            ↓ (usa)
+            ┌─────────────────────────────────────────┐
+            │ DATA LAYER (Camada de Dados) │ ← Busca dados do servidor
+            │ - REST Client (Conexão com API) │
+            │ - Repositórios (Organiza dados) │
+            └─────────────────────────────────────────┘
+            ↓ (usa)
+            ┌─────────────────────────────────────────┐
+            │ CONFIG LAYER (Configuração) │ ← Variáveis secretas
+            │ - Env.dart (APIs, URLs) │
+            └─────────────────────────────────────────┘
+        </div>
+
+        <!-- SEÇÃO 2: Pas por Pasta -->
+        <h2>📁 Pasta por Pasta - O Que Cada Uma Faz</h2>
+
+        <h3>1️⃣ lib/config/ - Configurações</h3>
+
+        <div class="folder-structure">
+            GOOGLE_API_KEY=xxx
+            BACKEND_BASE_URL=http://192.168.50.156:8080
+            THE_MOVIEDB_API_KEY=xxx
+        </div>
+
+        <div class="success-box">
+            <strong>✅ O que faz:</strong> Guarda informações secretas de forma segura (criptografadas)
+        </div>
+
+        <!-- SEÇÃO 3: Data Layer -->
+        <h3>2️⃣ lib/data/ - Camada de Dados</h3>
+
+        <p><strong>Exemplo: REST Client para conectar na API</strong></p>
+
+        <div class="code-block">
+            <span class="comment">// data/core/rest_client/tmdb_rest_client_provider.dart</span>
+            <span class="keyword">@Riverpod</span>(keepAlive: <span class="keyword">true</span>)
+            <span class="function">Dio</span> tmdbDioRestClient(<span class="class">Ref</span> ref) {
+            <span class="keyword">final</span> dio = <span class="function">Dio</span>(
+            <span class="function">BaseOptions</span>(
+            baseUrl: <span class="string">'https://api.themoviedb.org/3'</span>,
+            connectTimeout: <span class="keyword">const</span> <span class="function">Duration</span>(seconds: 60),
+            ),
+            );
+            dio.options.headers[<span class="string">'Authorization'</span>] =
+            <span class="string">'Bearer ${Env.theMovieDbApiKey}'</span>;
+            <span class="keyword">return</span> dio;
+            }
+        </div>
+
+        <div class="success-box">
+            <strong>✅ O que faz:</strong>
+            <ul>
+                <li>Cria uma conexão com a API do TheMovieDB</li>
+                <li>Configura timeout e headers</li>
+                <li>Adiciona o token de autenticação automaticamente</li>
+            </ul>
+        </div>
+
+        <!-- SEÇÃO 4: UI Layer -->
+        <h3>3️⃣ lib/ui/ - Camada de Apresentação</h3>
+
+        <p><strong>Estrutura de uma tela (exemplo: Splash Screen)</strong></p>
+
+        <div class="folder-structure">
+            ui/splash/
+            ├── splash_screen.dart ← A tela que o usuário vê
+            ├── splash_view_model.dart ← Lógica da tela
+            └── commands/
+            └── check_user_logged_command.dart ← Ações (cliques de botão)
+        </div>
+
+        <h3>Como Funciona:</h3>
+
+        <h4>1. splash_screen.dart (A Tela)</h4>
+
+        <div class="code-block">
+            <span class="keyword">class</span> <span class="class">SplashScreen</span> <span
+                class="keyword">extends</span> <span class="class">ConsumerStatefulWidget</span> {
+            <span class="comment">// Mostra imagem de fundo + logo</span>
+            <span class="comment">// Widget é ConsumerStatefulWidget = pode usar Riverpod</span>
+            }
+        </div>
+
+        <h4>2. splash_view_model.dart (A Lógica)</h4>
+
+        <div class="code-block">
+            <span class="keyword">class</span> <span class="class">SplashViewModel</span> {
+            <span class="keyword">final</span> <span class="class">CheckUserLoggedCommand</span>
+            _checkUserLoggedCommand;
+
+            <span class="keyword">void</span> <span class="function">checkLoginAndRedirect</span>()
+            =&gt; _checkUserLoggedCommand.execute(); <span class="comment">// Executa comando</span>
+            }
+        </div>
+
+        <h4>3. check_user_logged_command.dart (A Ação)</h4>
+
+        <div class="code-block">
+            <span class="keyword">@riverpod</span>
+            <span class="keyword">class</span> <span class="class">CheckUserLoggedCommand</span> <span
+                class="keyword">extends</span> _$<span class="class">CheckUserLoggedCommand</span> {
+            <span class="keyword">Future</span>&lt;<span class="keyword">void</span>&gt; <span
+                class="function">execute</span>() <span class="keyword">async</span> {
+            state = <span class="function">AsyncLoading</span>(); <span class="comment">// Mostra carregamento</span>
+            <span class="keyword">await</span> <span class="function">Future.delayed</span>(<span
+                class="keyword">const</span> <span class="function">Duration</span>(milliseconds: 300));
+            state = <span class="function">AsyncData</span>(<span class="keyword">true</span>); <span class="comment">//
+                Marca como carregado</span>
+            }
+            }
+        </div>
+
+        <!-- SEÇÃO 5: Fluxo Completo -->
+        <h2>🔄 Fluxo Completo (Como Tudo Funciona Junto)</h2>
+
+        <h3>Exemplo: Usuário Abre o App</h3>
+
+        <div class="diagram">
+            1. main.dart
+            ↓ Inicia o app
+
+            2. cinebox_main_app.dart
+            ↓ Carrega tema e rotas
+
+            3. splash_screen.dart aparece
+            ↓ Mostra logo + background
+
+            4. splash_view_model chama CheckUserLoggedCommand
+            ↓ Execute() começa
+
+            5. AsyncLoading (mostra spinner de carregamento)
+            ↓ Aguarda 300ms
+
+            6. AsyncData(true)
+            ↓ Navega para /login ou /home
+        </div>
+
+        <!-- SEÇÃO 6: Padrões -->
+        <h2>🧩 Padrões Usados (Os Nomes Complicados)</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Padrão</th>
+                    <th>O Que Faz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Clean Architecture</strong></td>
+                    <td>Separa o projeto em camadas (UI, Data, Config) para ficar organizado</td>
+                </tr>
+                <tr>
+                    <td><strong>MVVM-like</strong></td>
+                    <td>ViewModel cuida da lógica, Screen cuida da UI</td>
+                </tr>
+                <tr>
+                    <td><strong>Repository Pattern</strong></td>
+                    <td>Centraliza o acesso aos dados (tipo um gerente de dados)</td>
+                </tr>
+                <tr>
+                    <td><strong>Dependency Injection</strong></td>
+                    <td>Riverpod injeta as dependências automaticamente</td>
+                </tr>
+                <tr>
+                    <td><strong>Command Pattern</strong></td>
+                    <td>Cada ação é uma classe (CheckUserLoggedCommand, etc)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SEÇÃO 7: Por que funciona -->
+        <h2>🎯 Por Que Funciona Assim?</h2>
+
+        <div class="feature-list">
+            <div class="feature-item">
+                <strong>✅ Organizado</strong>
+                <p>Cada pasta tem uma responsabilidade</p>
+            </div>
+            <div class="feature-item">
+                <strong>✅ Testável</strong>
+                <p>Pode testar lógica sem a UI</p>
+            </div>
+            <div class="feature-item">
+                <strong>✅ Reutilizável</strong>
+                <p>Pode usar ViewModel em várias telas</p>
+            </div>
+            <div class="feature-item">
+                <strong>✅ Escalável</strong>
+                <p>Fácil adicionar novas features</p>
+            </div>
+            <div class="feature-item">
+                <strong>✅ Reativo</strong>
+                <p>Riverpod atualiza UI automaticamente</p>
+            </div>
+            <div class="feature-item">
+                <strong>✅ Seguro</strong>
+                <p>Dados sensíveis ficam protegidos</p>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 8: Diagrama Final -->
+        <h2>📊 Diagrama Simplificado</h2>
+
+        <div class="diagram">
+            Usuário clica no botão
+            <p> ↓</p>
+            Screen chama ViewModel
+            <p> ↓</p>
+            ViewModel chama Command
+            <p>↓</p>
+            Command executa lógica
+            <p> ↓</p>
+            Command atualiza estado (AsyncLoading → AsyncData)
+            <p> ↓</p>
+            Riverpod avisa Screen
+            <p> ↓</p>
+            Screen redesenha com novo estado
+            <p>↓</p>
+            Usuário vê o resultado
+        </div>
+
+        <!-- SEÇÃO 9: Resumo -->
+        <h2>📝 Resumo Bem Simples</h2>
+
+        <div class="info-box">
+            <p><strong>Screen</strong> = O desenho (o que o usuário vê)</p>
+            <p><strong>ViewModel</strong> = O maestro (coordena as ações)</p>
+            <p><strong>Command</strong> = O executor (faz as coisas)</p>
+            <p><strong>REST Client</strong> = O mensageiro (busca dados no servidor)</p>
+            <p><strong>Env</strong> = O cofre (guarda senhas)</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>📚 Documentação gerada para o projeto CineBox</p>
+            <p>Data: 21 de Fevereiro de 2026</p>
+            <p>🔗 Projeto educacional - Flutter com Clean Architecture</p>
+        </div>
+    </div>
+</body>
+
+</html>
