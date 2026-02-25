@@ -5,9 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repositories_providers.g.dart';
 
-@Riverpod()
+@riverpod
 AuthRepository authRepository(Ref ref) {
-  var googleSinginServiceProvider;
   return AuthRepositoryImpl(
     localStorageService: ref.read(localStorageServiceProvider),
     googleSinginService: ref.read(googleSinginServiceProvider),
