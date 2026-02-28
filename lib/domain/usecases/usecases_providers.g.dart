@@ -57,3 +57,51 @@ final class GetMoviesByCategoryUsecaseProvider
 
 String _$getMoviesByCategoryUsecaseHash() =>
     r'ee1e937b2a6758ba1014ec7b0a329dcbccfeda95';
+
+@ProviderFor(getMoviesByGenreUsecase)
+final getMoviesByGenreUsecaseProvider = GetMoviesByGenreUsecaseProvider._();
+
+final class GetMoviesByGenreUsecaseProvider
+    extends
+        $FunctionalProvider<
+          GetMoviesByGenreUsecase,
+          GetMoviesByGenreUsecase,
+          GetMoviesByGenreUsecase
+        >
+    with $Provider<GetMoviesByGenreUsecase> {
+  GetMoviesByGenreUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getMoviesByGenreUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getMoviesByGenreUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetMoviesByGenreUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetMoviesByGenreUsecase create(Ref ref) {
+    return getMoviesByGenreUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetMoviesByGenreUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetMoviesByGenreUsecase>(value),
+    );
+  }
+}
+
+String _$getMoviesByGenreUsecaseHash() =>
+    r'1c5e404369d8c0263feca80c0d12a699c706ae80';
