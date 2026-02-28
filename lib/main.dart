@@ -9,5 +9,9 @@ void main() {
   GoogleSignIn.instance.initialize(
     serverClientId: Env.googleApiKey,
   );
-  runApp(ProviderScope(child: CineboxMainApp()));
+  runApp(
+    ProviderScope(
+      child: CineboxMainApp(),
+    ),
+  );
 }

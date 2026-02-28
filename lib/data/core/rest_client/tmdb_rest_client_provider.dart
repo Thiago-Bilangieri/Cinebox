@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'tmdb_rest_client_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-Dio tmdbDioRestClient(Ref ref) {
+Dio tmdbRestClient(Ref ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: 'https://api.themoviedb.org/3',

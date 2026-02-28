@@ -55,7 +55,7 @@ final class GoogleSinginServiceProvider
 }
 
 String _$googleSinginServiceHash() =>
-    r'f556fa98237d73a9ab0f29aed542c6e0d900c55c';
+    r'55d07e38457f720c57709faf02436194b33a595c';
 
 @ProviderFor(localStorageService)
 final localStorageServiceProvider = LocalStorageServiceProvider._();
@@ -104,3 +104,85 @@ final class LocalStorageServiceProvider
 
 String _$localStorageServiceHash() =>
     r'b13d3fc52d65d58edf3fdad059f2d81d86d73415';
+
+@ProviderFor(authService)
+final authServiceProvider = AuthServiceProvider._();
+
+final class AuthServiceProvider
+    extends $FunctionalProvider<AuthService, AuthService, AuthService>
+    with $Provider<AuthService> {
+  AuthServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authServiceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthService create(Ref ref) {
+    return authService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthService>(value),
+    );
+  }
+}
+
+String _$authServiceHash() => r'31a8a9a10730e10286fb81ccf5021779585ae9b4';
+
+@ProviderFor(tmdbService)
+final tmdbServiceProvider = TmdbServiceProvider._();
+
+final class TmdbServiceProvider
+    extends $FunctionalProvider<TmdbService, TmdbService, TmdbService>
+    with $Provider<TmdbService> {
+  TmdbServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'tmdbServiceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$tmdbServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<TmdbService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TmdbService create(Ref ref) {
+    return tmdbService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TmdbService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TmdbService>(value),
+    );
+  }
+}
+
+String _$tmdbServiceHash() => r'4d67db2929abb71234d482e083f507f1fce67715';

@@ -2,20 +2,25 @@ import 'dart:developer';
 
 import 'package:cinebox/config/result/result.dart';
 import 'package:cinebox/data/exceptions/data_exception.dart';
+import 'package:cinebox/data/services/auth/auth_service.dart';
 import 'package:cinebox/data/services/google_signin/google_signin_service.dart';
 import 'package:cinebox/data/services/local_storage/local_storage_service.dart';
+import 'package:dio/dio.dart';
 
 import './auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final LocalStorageService _localStorageService;
   final GoogleSigninService _googleSinginService;
+  final AuthService _authService;
 
   AuthRepositoryImpl({
     required LocalStorageService localStorageService,
     required GoogleSigninService googleSinginService,
+    required AuthService authService,
   }) : _localStorageService = localStorageService,
-       _googleSinginService = googleSinginService;
+       _googleSinginService = googleSinginService,
+       _authService = authService;
   @override
   Future<Result<bool>> isLogged() async {
     final resultToken = await _localStorageService.getIdToken();
@@ -30,11 +35,24 @@ class AuthRepositoryImpl implements AuthRepository {
     final result = await _googleSinginService.signIn();
     switch (result) {
       case Success<String>(:final value):
-        await _localStorageService.saveIdToken(value);
-        return successOfUnit();
-      case Failure(:final error):
+        try {
+          await _localStorageService.saveIdToken(value);
+          await _authService.auth();
+          return successOfUnit();
+        } on DioException catch (e, s) {
+          log(
+            'Error authenticating with backend',
+            name: 'AuthRepositoryImpl.signIn',
+            error: e,
+            stackTrace: s,
+          );
+          return Failure(
+            DataException(message: 'Error signing in google account'),
+          );
+        }
+      case Failure<String>(:final error):
         log(
-          'Error signing in',
+          'Error signing in with google',
           name: 'AuthRepositoryImpl.signIn',
           error: error,
         );
